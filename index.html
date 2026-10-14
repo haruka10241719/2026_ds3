@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>名市大ギタマン演奏曲アーカイブ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 16px;
+      color: #333;
+      background: #f7f8f6;
+    }
+    h1 { color: #245747; }
+    input {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    details {
+      background: white;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: bold;
+    }
+    li { margin: 8px 0; }
+    #count { color: #666; }
+  </style>
+</head>
+<body>
+
+  <h1>名市大ギタマン演奏曲アーカイブ</h1>
+  <p>名古屋市立大学ギターマンドリンクラブの演奏記録</p>
+
+  <input id="search" type="search"
+    placeholder="演奏会名・曲名・作曲者で検索">
+
+  <p id="count"></p>
+  <div id="events"></div>
+
+  <script>
+    const archive = [
+      {
+        title: "第1回定期演奏会 1965.01.18",
+        songs: [
+          "浜辺の歌／成田為三",
+          "民謡「木曾節」による小狂想曲／池谷一郎",
+          "童謡集「幼き日の思い出」／赤木淳",
+          "峠／鈴木静一"
+        ]
+      },
+      {
+        title: "第2回定期演奏会 1966.01.10",
+        songs: [
+          "セレナータ第二番／平山英三郎",
+          "西域より／川崎貞利",
+          "小川のつぶやき／小池正夫",
+          "微風／小池正夫"
+        ]
+      },
+      {
+        title: "第3回定期演奏会 1967.01.11",
+        songs: [
+          "マンドリニストの行進／メッツァカーポ",
+          "アンダルーズ／ラコーメ",
+          "ジプシー風狂詩曲／マチョッキ"
+        ]
+      }
+    ];
+
+    const search = document.getElementById("search");
+    const events = document.getElementById("events");
+    const count = document.getElementById("count");
+
+    function render() {
+      const keyword = search.value.trim().toLowerCase();
+
+      const filtered = archive.filter(event => {
+        const text = event.title + " " + event.songs.join(" ");
+        return text.toLowerCase().includes(keyword);
+      });
+
+      count.textContent = filtered.length + "件の演奏会";
+      events.replaceChildren();
+
+      filtered.forEach(event => {
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = event.title;
+        details.appendChild(summary);
+
+        const list = document.createElement("ul");
+
+        event.songs.forEach(song => {
+          const item = document.createElement("li");
+          item.textContent = song;
+          list.appendChild(item);
+        });
+
+        details.appendChild(list);
+        events.appendChild(details);
+      });
+    }
+
+    search.addEventListener("input", render);
+    render();
+  </script>
+
+</body>
+</html>
